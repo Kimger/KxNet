@@ -1,6 +1,10 @@
 package com.onetos.kimger.kxnet.kxnet;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
+
+import com.orhanobut.hawk.Hawk;
+import com.orhanobut.hawk.HawkBuilder;
 
 import org.reactivestreams.Subscriber;
 
@@ -23,40 +27,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class KxNet {
 
-    private final String baseUrl;
-    private final Converter.Factory converterFactory;
-    private final CallAdapter.Factory callAdapterFactory;
-    private Retrofit mRetrofit;
-    private final static String BASE_URL = ApiService.BASE_URL;
+    private static KxProcessor sProcessor = new KxProcessor.EmptyKxProcessor();
+    private static KxBuilder sKxBuilder;
 
 
-    public KxNet(String baseUrl, Converter.Factory converterFactory, CallAdapter.Factory callAdapterFactory) {
-        this.baseUrl = baseUrl;
-        this.converterFactory = converterFactory;
-        this.callAdapterFactory = callAdapterFactory;
-        mRetrofit = createRetrofit();
+    public static KxBuilder init(Context context) {
+        Hawk.init(context).build();
+        sKxBuilder = new KxBuilder();
+        return sKxBuilder;
     }
 
-    public static KxNet getDefault() {
-        return new KxNet.Builder().build();
+
+    public static void changeUrl(String url) {
+        sProcessor.changeUrl(url);
     }
 
-    public static KxNet newInstance(KxNet.Builder builder) {
-        return builder.build();
-    }
-
-    public static Builder newInstance() {
-        return new Builder();
-    }
-
-    public Retrofit createRetrofit() {
-        return RetrofitHelper.getInstance().getRetrofit(baseUrl);
-    }
-
-    public <T> void exec(Observable<T> observable, Observer<T> observer) {
-        observable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
+    @SuppressWarnings("unchecked")
+    public static <T> void exec(Observable<T> observable, Observer<T> observer) {
+        sProcessor.exec(observable, observer);
     }
 
     /**
@@ -66,50 +54,21 @@ public class KxNet {
      * @param subscriber
      * @param <T>
      */
-    public <T> void exec(Flowable<T> flowable, Subscriber<T> subscriber) {
-        flowable.subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(subscriber);
+    @SuppressWarnings("unchecked")
+    public static <T> void exec(Flowable<T> flowable, Subscriber<T> subscriber) {
+        sProcessor.exec(flowable, subscriber);
     }
 
-
-    public static final class Builder {
-
-        private String baseUrl;
-        private Converter.Factory converterFactory;
-        private CallAdapter.Factory factory;
-        private Flowable flowable;
-
-        public Builder baseUrl(String baseUrl) {
-            checkNotNull(baseUrl, "baseUrl == null");
-            this.baseUrl = baseUrl;
-            return this;
-        }
-
-        public Builder addConverterFactory(Converter.Factory converterFactory) {
-            checkNotNull(converterFactory, "callAdapterFactory == null");
-            this.converterFactory = converterFactory;
-            return this;
-        }
-
-        public Builder addCallAdapterFactory(CallAdapter.Factory factory) {
-            checkNotNull(factory, "callAdapterFactory == null");
-            this.factory = factory;
-            return this;
-        }
-
-        public KxNet build() {
-            return new KxNet(baseUrl != null ? baseUrl : BASE_URL, converterFactory != null ? converterFactory :
-                    GsonConverterFactory.create(), factory !=
-                    null ? factory : RxJava2CallAdapterFactory.create());
-        }
+    public static Retrofit getRetrofit() {
+        return sProcessor.getRetrofit();
     }
 
-
-    static <T> T checkNotNull(@Nullable T object, String message) {
-        if (object == null) {
-            throw new NullPointerException(message);
-        }
-        return object;
+    public static void build(KxBuilder kxBuilder) {
+        sProcessor = new DefaultKxProcessor(kxBuilder);
     }
+
+    static class Holder {
+        static KxNet INSTANCE = new KxNet();
+    }
+
 }

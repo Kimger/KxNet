@@ -1,5 +1,10 @@
 package com.onetos.kimger.kxnet.kxnet;
 
+import com.orhanobut.hawk.Hawk;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author Kimger
  * @email kimgerxue@gmail.com
@@ -8,19 +13,20 @@ package com.onetos.kimger.kxnet.kxnet;
  */
 public class ApiManager {
 
+
     private static class SingletonHolder {
         private static final ApiManager INSTANCE = new ApiManager();
     }
+
 
     public static ApiManager getInstance() {
         return SingletonHolder.INSTANCE;
     }
 
-    public static ApiService getDefaultApi() {
-        return getInstance().getApiService(ApiService.class);
-    }
 
     public <T> T getApiService(Class<T> service) {
-        return KxNet.getDefault().createRetrofit().create(service);
+        return KxNet.getRetrofit().create(service);
     }
+
+
 }

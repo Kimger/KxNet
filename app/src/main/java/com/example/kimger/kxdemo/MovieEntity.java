@@ -1,4 +1,4 @@
-package com.onetos.kimger.kxnet.kxnet;
+package com.example.kimger.kxdemo;
 
 import java.util.List;
 

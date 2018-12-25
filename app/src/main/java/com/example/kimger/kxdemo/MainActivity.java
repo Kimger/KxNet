@@ -2,21 +2,12 @@ package com.example.kimger.kxdemo;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.onetos.kimger.kxnet.kxnet.ApiManager;
 import com.onetos.kimger.kxnet.kxnet.KxNet;
-import com.onetos.kimger.kxnet.kxnet.MovieEntity;
-import com.onetos.kimger.kxnet.kxnet.MySubScriber;
-
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
-
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
+import com.onetos.kimger.kxnet.kxnet.CommonSubScriber;
 
 /**
  * @param
@@ -41,19 +32,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                KxNet.getDefault().exec(ApiManager.getDefaultApi().getTopMovie(0, 20), new MySubScriber<MovieEntity>() {
-                    @Override
-                    public void onError() {
+                KxNet.changeUrl(ApiService.BASE_URL2);
+                ApiService apiService = ApiManager.getInstance().getApiService(ApiService.class);
 
-                    }
-
+                KxNet.exec(apiService.getTopMovie(0, 20), new CommonSubScriber<MovieEntity>() {
                     @Override
                     public void onSuccess(MovieEntity movieEntity) {
-                        Log.d(TAG, "onSuccess: ");
-                        Toast.makeText(MainActivity.this, movieEntity.getSubjects().get(0).getTitle(), Toast.LENGTH_SHORT).show();
+
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
                     }
                 });
-
 
             }
         });

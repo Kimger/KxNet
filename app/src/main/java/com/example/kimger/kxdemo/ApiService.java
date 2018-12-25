@@ -1,13 +1,7 @@
-package com.onetos.kimger.kxnet.kxnet;
-
-import java.util.logging.LoggingMXBean;
+package com.example.kimger.kxdemo;
 
 import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import retrofit2.http.Field;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
-import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 /**
@@ -19,6 +13,7 @@ import retrofit2.http.Query;
 public interface ApiService {
 
     String BASE_URL = "https://api.douban.com/v2/movie/";
+    String BASE_URL2 = "https://api.douban.com/v2/movie/22222222222/";
 
     @GET("top250")
     Flowable<MovieEntity> getTopMovie(@Query("start") int start, @Query("count") int count);

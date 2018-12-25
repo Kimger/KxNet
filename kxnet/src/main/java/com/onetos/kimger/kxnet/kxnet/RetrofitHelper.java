@@ -21,6 +21,7 @@ public class RetrofitHelper {
     private long DEFAULT_TIME_OUT = 2000;
     private OkHttpClient mOkHttpClient;
     private Retrofit mRetrofit;
+    private static String sUrl;
 
     private static class SingletonHolder {
         private static final RetrofitHelper INSTANCE = new RetrofitHelper();
@@ -55,7 +56,7 @@ public class RetrofitHelper {
                     .build();
         }
         // 初始化Retrofit
-        if (mRetrofit != null) {
+        if (mRetrofit != null && url.equals(sUrl)) {
             return mRetrofit;
         }
         mRetrofit = new Retrofit.Builder()
@@ -64,6 +65,7 @@ public class RetrofitHelper {
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
+        sUrl = url;
         return mRetrofit;
     }
 
