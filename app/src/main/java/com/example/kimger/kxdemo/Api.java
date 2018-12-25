@@ -11,10 +11,5 @@ import okhttp3.ResponseBody;
  * @description
  */
 public class Api {
-    public <T> T get(String url, Map<String, T> maps, BaseSubscriber<ResponseBody> subscriber) {
-        return (T) ApiService.get(url, maps)
-                .compose(schedulersTransformer)
-                .compose(handleErrTransformer())
-                .subscribe(subscriber);
-    }
+
 }
