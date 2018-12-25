@@ -37,7 +37,6 @@ public class KxNet {
         return sKxBuilder;
     }
 
-
     public static void changeUrl(String url) {
         sProcessor.changeUrl(url);
     }
@@ -65,10 +64,6 @@ public class KxNet {
 
     public static void build(KxBuilder kxBuilder) {
         sProcessor = new DefaultKxProcessor(kxBuilder);
-    }
-
-    static class Holder {
-        static KxNet INSTANCE = new KxNet();
     }
 
 }

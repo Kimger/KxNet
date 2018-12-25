@@ -15,6 +15,7 @@ public abstract class CommonSubScriber<T> extends ResourceSubscriber<T> {
 
     @Override
     public void onNext(T t) {
+
         onSuccess(t);
     }
 

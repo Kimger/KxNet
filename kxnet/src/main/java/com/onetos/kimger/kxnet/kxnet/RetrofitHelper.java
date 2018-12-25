@@ -37,7 +37,12 @@ public class RetrofitHelper {
      * @param url 基础baseUrl
      * @return
      */
-    public Retrofit getRetrofit(String url) {
+
+    Retrofit getRetrofit(String url) {
+        return getRetrofit(url, null, null);
+    }
+
+    private Retrofit getRetrofit(String url, String headerKey, String headerValue) {
         // 初始化okhttp
         if (mOkHttpClient == null) {
             mOkHttpClient = new OkHttpClient().newBuilder()
@@ -67,6 +72,10 @@ public class RetrofitHelper {
                 .build();
         sUrl = url;
         return mRetrofit;
+    }
+
+    void addHead() {
+
     }
 
 //    //返回一个泛型类

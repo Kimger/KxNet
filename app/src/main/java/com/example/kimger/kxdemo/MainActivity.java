@@ -9,6 +9,8 @@ import com.onetos.kimger.kxnet.kxnet.ApiManager;
 import com.onetos.kimger.kxnet.kxnet.KxNet;
 import com.onetos.kimger.kxnet.kxnet.CommonSubScriber;
 
+import java.util.HashMap;
+
 /**
  * @param
  * @author Kimger
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
                 KxNet.changeUrl(ApiService.BASE_URL2);
                 ApiService apiService = ApiManager.getInstance().getApiService(ApiService.class);
-
+                apiService.get(ApiService.BASE_URL2,new HashMap<String,String >());
                 KxNet.exec(apiService.getTopMovie(0, 20), new CommonSubScriber<MovieEntity>() {
                     @Override
                     public void onSuccess(MovieEntity movieEntity) {

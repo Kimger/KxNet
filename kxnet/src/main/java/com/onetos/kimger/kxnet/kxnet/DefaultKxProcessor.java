@@ -50,6 +50,10 @@ public class DefaultKxProcessor<T> implements KxProcessor<T> {
                 .subscribe(observer);
     }
 
+    public void execWithHead(Flowable<T> flowable, Subscriber<T> subscriber){
+
+    }
+
     @Override
     public KxNet getDefault() {
 
